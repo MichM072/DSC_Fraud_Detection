@@ -8,28 +8,16 @@ from pandas import DataFrame
 import pandas as pd
 import numpy as np
 
-# logger.add(sys.stdout, colorize=True, format="<green>{time}</green> <level>{message}</level>")
-
-# def exclude_current_maxDest(row, df):
-#   """
-#   Function that calculates max of dest account excluding the current transaction
-#   """
-#   current_max = row['maxDest']
-#   amount = row['amount']
-#   transactions = row['num_transDest']
-  
-#   if current_max == amount:
-#     if transactions > 1:
-#       # Find the maximum amount excluding the current transaction
-#       max_exclude_current = df.loc[(df['nameDest'] == row['nameDest']) & (df['amount'] != amount), 'amount'].max()
-#       if pd.notna(max_exclude_current):
-#         return max_exclude_current
-#   return current_max
-
 def vectorized_exclude_func(df: DataFrame, excl_type: str, std: int, num_transactions:int) -> DataFrame:
     """
     Function that calculates or mean of dest account excluding the current transaction in a vectorized manner.
     Warning: This function can not be used with df.apply() and requires the entire dataframe to be passed in.
+    df: DataFrame containing the transaction data.
+    excl_type: Type of max with exlcusion, either "maxDest" or "maxOrig".
+    std: Standard deviation of the noise to be added.
+    num_transactions: Number of transactions in the dataframe.
+
+    returns: DataFrame with added column for max with exclusion.
     """
 
     type_dict = {
@@ -57,8 +45,9 @@ def vectorized_exclude_func(df: DataFrame, excl_type: str, std: int, num_transac
         max_vals
     )
 
-
     df_copy['maxDest'] += noise
+
+    return df_copy
 
 
 

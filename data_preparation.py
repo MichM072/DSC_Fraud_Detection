@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from utils import *
 import seaborn as sns
 sns.set_theme()
-from utils_m import simple_log
+from utils_m import simple_log, vectorized_exclude_func
 from tqdm import tqdm
 
 def main():
@@ -77,17 +77,12 @@ def main():
     progress_bar.update(1)
 
     # calculate the overall max of both the destination and origin account (excluding current transaction) and add noise
-    noise = np.random.normal(0, std, num_transactions)
-    df['maxDest'] = df.groupby('nameDest')['amount'].transform('max')
-    df['maxDest'] = df.progress_apply(lambda x: exclude_current_maxDest(x, df), axis=1)
-    df['maxDest'] += noise
+
+    df = vectorized_exclude_func(df, "maxDest", std, num_transactions)
 
     progress_bar.update(1)
 
-    noise = np.random.normal(0, std, num_transactions)
-    df['maxOrig'] = df.groupby('nameOrig')['amount'].transform('max')
-    df['maxOrig'] = df.progress_apply(lambda x: exclude_current_maxOrig(x, df), axis=1)
-    df['maxOrig'] += noise
+    df = vectorized_exclude_func(df, "maxOrig", std, num_transactions)
 
     progress_bar.update(1)
 
