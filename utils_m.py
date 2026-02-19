@@ -12,12 +12,18 @@ def vectorized_exclude_func(df: DataFrame, excl_type: str, std: int, num_transac
     """
     Function that calculates or mean of dest account excluding the current transaction in a vectorized manner.
     Warning: This function can not be used with df.apply() and requires the entire dataframe to be passed in.
-    df: DataFrame containing the transaction data.
-    excl_type: Type of max with exlcusion, either "maxDest" or "maxOrig".
-    std: Standard deviation of the noise to be added.
-    num_transactions: Number of transactions in the dataframe.
 
-    returns: DataFrame with added column for max with exclusion.
+    :param df: DataFrame containing the transaction data.
+    :type df: DataFrame
+    :param excl_type: Type of max with exlcusion, either "maxDest" or "maxOrig".
+    :type excl_type: str
+    :param std: Standard deviation of the noise to be added.
+    :type std: int
+    :param num_transactions: Number of transactions in the dataframe.
+    :type num_transactions: int
+
+    :returns: DataFrame with added column for max with exclusion.
+    :rtype: DataFrame
     """
 
     type_dict = {
